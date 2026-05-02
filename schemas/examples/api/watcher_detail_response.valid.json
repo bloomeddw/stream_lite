@@ -1,0 +1,37 @@
+{
+  "watcher_id": "22222222-2222-4222-8222-222222222222",
+  "name": "demo",
+  "lifecycle_state": "CREATED",
+  "operational_status": "green",
+  "sources": [
+    {
+      "folder_id": "11111111-1111-4111-8111-111111111111",
+      "display_path": "/demo/path",
+      "route_tags": [
+        "DEMO"
+      ],
+      "route_tags_text": "DEMO"
+    }
+  ],
+  "destinations": [
+    {
+      "folder_id": "22222222-2222-4222-8222-222222222222",
+      "display_path": "/demo/path",
+      "route_tags": [
+        "DEMO"
+      ],
+      "route_tags_text": "DEMO"
+    }
+  ],
+  "route_policy": "tag_match_all_destinations",
+  "route_preview": {
+    "status": "green",
+    "matched_destination_count": 1,
+    "unmatched_source_count": 1,
+    "unmatched_destination_count": 1,
+    "generated_at": "2026-04-25T23:55:00Z"
+  },
+  "created_at": "2026-04-25T23:55:00Z",
+  "updated_at": "2026-04-25T23:55:00Z",
+  "correlation_id": "33333333-3333-4333-8333-333333333333"
+}

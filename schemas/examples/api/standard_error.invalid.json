@@ -1,0 +1,8 @@
+{
+  "error_code": "TAG_INVALID",
+  "message": "Route tag must match ^[A-Z0-9_-]{1,32}$.",
+  "field": "sources[0].route_tags_text",
+  "resource_id": null,
+  "current_state": null,
+  "_invalid_example_reason": "missing required field correlation_id"
+}

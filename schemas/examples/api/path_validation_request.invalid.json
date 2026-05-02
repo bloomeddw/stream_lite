@@ -1,0 +1,4 @@
+{
+  "path": "/demo/path",
+  "_invalid_example_reason": "missing required field purpose"
+}

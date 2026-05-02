@@ -1,0 +1,14 @@
+{
+  "status": "ready",
+  "dependencies": [
+    {
+      "name": "postgres",
+      "status": "ready",
+      "checked_at": "2026-04-25T23:55:00Z",
+      "message": "demo",
+      "error_code": null
+    }
+  ],
+  "checked_at": "2026-04-25T23:55:00Z",
+  "_invalid_example_reason": "missing required field correlation_id"
+}

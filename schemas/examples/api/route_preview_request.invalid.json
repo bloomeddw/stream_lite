@@ -1,0 +1,14 @@
+{
+  "destinations": [
+    {
+      "folder_id": "22222222-2222-4222-8222-222222222222",
+      "display_path": "/demo/path",
+      "route_tags": [
+        "demo"
+      ],
+      "route_tags_text": "demo"
+    }
+  ],
+  "route_policy": "tag_match_all_destinations",
+  "_invalid_example_reason": "missing required field sources"
+}

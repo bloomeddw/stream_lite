@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "event_type": "delivery.completed",
+  "event_id": "11111111-1111-4111-8111-111111111111",
+  "idempotency_key": "delivery.completed:44444444-4444-4444-8444-444444444444:1",
+  "occurred_at": "2026-04-25T23:55:00Z",
+  "producer": "delivery",
+  "job_id": "44444444-4444-4444-8444-444444444444",
+  "watcher_id": "33333333-3333-4333-8333-333333333333",
+  "attempt_number": 1,
+  "payload": {
+    "destination_folder_id": "33333333-3333-4333-8333-333333333333",
+    "destination_display_path": "demo",
+    "output_manifest_id": "33333333-3333-4333-8333-333333333333",
+    "bytes_written": 1,
+    "completed_at": "2026-04-25T23:55:00Z",
+    "duration_seconds": 0.25
+  },
+  "_invalid_example_reason": "missing required field correlation_id"
+}

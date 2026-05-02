@@ -1,0 +1,8 @@
+# Development and verification dependencies for contract-first implementation.
+# Install runtime requirements first so schema-bound implementation tests can import app code.
+-r requirements.txt
+jsonschema>=4.21,<5
+pytest>=8,<9
+sphinx>=7,<9
+myst-parser>=2,<5
+httpx>=0.27,<1

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "event_type": "processing.started",
+  "event_id": "11111111-1111-4111-8111-111111111111",
+  "idempotency_key": "processing.started:44444444-4444-4444-8444-444444444444:1",
+  "occurred_at": "2026-04-25T23:55:00Z",
+  "producer": "processor",
+  "job_id": "44444444-4444-4444-8444-444444444444",
+  "watcher_id": "33333333-3333-4333-8333-333333333333",
+  "attempt_number": 1,
+  "payload": {
+    "engine": "spark",
+    "engine_version": "demo",
+    "input_locator": "demo",
+    "started_at": "2026-04-25T23:55:00Z"
+  },
+  "_invalid_example_reason": "missing required field correlation_id"
+}

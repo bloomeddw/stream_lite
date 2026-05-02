@@ -1,0 +1,10 @@
+{
+  "purpose": "source",
+  "path": "/demo/path",
+  "normalized_path": "/demo/path",
+  "display_path": "/demo/path",
+  "status": "green",
+  "reason_code": "demo",
+  "message": "demo",
+  "_invalid_example_reason": "missing required field correlation_id"
+}

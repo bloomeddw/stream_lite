@@ -1,0 +1,109 @@
+
+{
+  "title": "DeliveryStartedEvent",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurred_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "job_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "watcher_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "attempt_number": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "event_type": {
+      "const": "delivery.started"
+    },
+    "producer": {
+      "const": "delivery"
+    },
+    "payload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "destination_folder_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "destination_display_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "matched_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z0-9_-]{1,32}$"
+          }
+        },
+        "output_manifest_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "started_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+        }
+      },
+      "required": [
+        "destination_folder_id",
+        "destination_display_path",
+        "matched_tags",
+        "output_manifest_id",
+        "started_at"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "idempotency_key",
+    "correlation_id",
+    "occurred_at",
+    "job_id",
+    "watcher_id",
+    "attempt_number",
+    "event_type",
+    "producer",
+    "payload"
+  ]
+}

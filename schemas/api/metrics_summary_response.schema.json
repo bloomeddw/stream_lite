@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "job_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "stage_durations_seconds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "queue_lag": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "retry_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "delivery_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "watcher_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "job_counts",
+    "stage_durations_seconds",
+    "queue_lag",
+    "retry_counts",
+    "delivery_counts",
+    "watcher_counts",
+    "correlation_id"
+  ],
+  "title": "MetricsSummaryResponse"
+}

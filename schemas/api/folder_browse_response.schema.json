@@ -1,0 +1,72 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "purpose": {
+      "enum": [
+        "source",
+        "destination"
+      ]
+    },
+    "root": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "display_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "is_directory": {
+            "type": "boolean"
+          },
+          "is_selectable": {
+            "type": "boolean"
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "name",
+          "display_path",
+          "is_directory",
+          "is_selectable",
+          "reason_code"
+        ]
+      }
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "purpose",
+    "root",
+    "items",
+    "correlation_id"
+  ],
+  "title": "FolderBrowseResponse"
+}

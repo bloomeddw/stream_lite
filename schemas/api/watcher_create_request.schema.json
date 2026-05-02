@@ -1,0 +1,144 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folder_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "display_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "route_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]{1,32}$"
+            },
+            "minItems": 1
+          },
+          "route_tags_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "health_status": {
+            "enum": [
+              "green",
+              "yellow",
+              "red"
+            ]
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "folder_id",
+          "display_path",
+          "route_tags",
+          "route_tags_text"
+        ]
+      },
+      "minItems": 1
+    },
+    "destinations": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "folder_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "display_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "route_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]{1,32}$"
+            },
+            "minItems": 1
+          },
+          "route_tags_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "health_status": {
+            "enum": [
+              "green",
+              "yellow",
+              "red"
+            ]
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "folder_id",
+          "display_path",
+          "route_tags",
+          "route_tags_text"
+        ]
+      },
+      "minItems": 1
+    },
+    "route_policy": {
+      "enum": [
+        "tag_match_all_destinations"
+      ]
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "name",
+    "sources",
+    "destinations",
+    "route_policy"
+  ],
+  "title": "WatcherCreateRequest"
+}

@@ -1,0 +1,32 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "purpose": {
+      "enum": [
+        "source",
+        "destination"
+      ]
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^/(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "correlation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "purpose",
+    "path"
+  ],
+  "title": "PathValidationRequest"
+}

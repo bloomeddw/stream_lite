@@ -1,0 +1,13 @@
+{
+    "purpose":  "source",
+    "root":  "C:\\Users\\alice\\Desktop\\drop",
+    "items":  {
+                  "name":  "demo",
+                  "display_path":  "/demo/path",
+                  "is_directory":  true,
+                  "is_selectable":  true,
+                  "reason_code":  "demo"
+              },
+    "correlation_id":  "22222222-2222-4222-8222-222222222222"
+}
+

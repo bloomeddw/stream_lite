@@ -1,0 +1,32 @@
+{
+    "job_id":  "44444444-4444-4444-8444-444444444444",
+    "watcher_id":  "22222222-2222-4222-8222-222222222222",
+    "state":  "__invalid__",
+    "source":  {
+                   "file_id":  "33333333-3333-4333-8333-333333333333",
+                   "display_path":  "/demo/source-a/orders.csv",
+                   "source_folder_id":  "22222222-2222-4222-8222-222222222222",
+                   "size_bytes":  1024,
+                   "sha256":  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+               },
+    "destinations":  {
+                         "destination_folder_id":  "33333333-3333-4333-8333-333333333333",
+                         "display_path":  "/demo/destination-a",
+                         "route_tags":  "A",
+                         "matched_tags":  "A",
+                         "status":  "pending",
+                         "reason_code":  null
+                     },
+    "attempt_summary":  {
+                            "validation_attempts":  1,
+                            "processing_attempts":  0,
+                            "delivery_attempts":  0,
+                            "retry_attempts":  0,
+                            "last_attempt_at":  "2026-04-25T23:55:00Z"
+                        },
+    "latest_error":  null,
+    "created_at":  "2026-04-25T23:55:00Z",
+    "updated_at":  "2026-04-25T23:55:00Z",
+    "correlation_id":  "11111111-1111-4111-8111-111111111111"
+}
+

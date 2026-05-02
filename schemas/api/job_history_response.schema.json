@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "from_state": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "DETECTED",
+              "STABILIZING",
+              "REGISTERED",
+              "VALIDATING",
+              "VALIDATED",
+              "INVALID",
+              "QUARANTINED",
+              "PROCESSING",
+              "PROCESSED",
+              "DELIVERING",
+              "DELIVERED",
+              "RETRY_PENDING",
+              "FAILED",
+              "COMPLETED",
+              "COMPLETED_WITH_DELIVERY_ERRORS",
+              null
+            ]
+          },
+          "to_state": {
+            "enum": [
+              "DETECTED",
+              "STABILIZING",
+              "REGISTERED",
+              "VALIDATING",
+              "VALIDATED",
+              "INVALID",
+              "QUARANTINED",
+              "PROCESSING",
+              "PROCESSED",
+              "DELIVERING",
+              "DELIVERED",
+              "RETRY_PENDING",
+              "FAILED",
+              "COMPLETED",
+              "COMPLETED_WITH_DELIVERY_ERRORS"
+            ]
+          },
+          "actor_service": {
+            "enum": [
+              "api",
+              "watcher",
+              "validator",
+              "processor",
+              "delivery",
+              "retry_scheduler",
+              "event_dispatcher",
+              "streamlit"
+            ]
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          },
+          "occurred_at": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+          },
+          "event_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "from_state",
+          "to_state",
+          "actor_service",
+          "reason_code",
+          "occurred_at",
+          "event_id"
+        ]
+      }
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "job_id",
+    "history",
+    "correlation_id"
+  ],
+  "title": "JobHistoryResponse"
+}

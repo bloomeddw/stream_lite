@@ -1,0 +1,14 @@
+{
+    "schema_version":  "1.0.0",
+    "job_id":  "44444444-4444-4444-8444-444444444444",
+    "watcher_id":  "22222222-2222-4222-8222-222222222222",
+    "source_display_path":  "/demo/source-a/orders.csv",
+    "source_sha256":  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "reason_code":  "CSV_PARSE_ERROR",
+    "operator_message":  "CSV parsing failed for the uploaded file.",
+    "quarantine_display_path":  "/demo/quarantine/orders.csv",
+    "copy_status":  "__invalid__",
+    "created_at":  "2026-04-25T23:55:03Z",
+    "correlation_id":  "11111111-1111-4111-8111-111111111111"
+}
+

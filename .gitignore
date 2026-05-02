@@ -1,0 +1,31 @@
+# Local Python environments
+.venv/
+venv/
+ENV/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.pytest_vendor/
+pytest_vendor/
+wheelhouse/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Sphinx generated output
+docs/_build/
+
+# Local IDE/editor metadata
+.idea/
+.vscode/
+
+# Local OS files
+.DS_Store
+Thumbs.db
+
+# Local troubleshooting/cache artifacts
+.tmp/
+pytest-cache-files-*

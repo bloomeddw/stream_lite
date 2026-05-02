@@ -1,0 +1,3 @@
+{
+  "_invalid_example_reason": "schema has no removable required field; fixture intentionally violates additionalProperties"
+}

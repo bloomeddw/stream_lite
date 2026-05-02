@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "route_policy": {
+      "enum": [
+        "tag_match_all_destinations"
+      ]
+    },
+    "source_matches": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "source_folder_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "matched_destination_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "source_folder_id",
+          "matched_destination_ids"
+        ]
+      }
+    },
+    "unmatched_sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "unmatched_destinations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "status": {
+      "enum": [
+        "green",
+        "yellow",
+        "red"
+      ]
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "route_policy",
+    "source_matches",
+    "unmatched_sources",
+    "unmatched_destinations",
+    "status",
+    "correlation_id"
+  ],
+  "title": "RoutePreviewResponse"
+}

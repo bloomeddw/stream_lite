@@ -1,0 +1,241 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "watcher_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "state": {
+      "enum": [
+        "DETECTED",
+        "STABILIZING",
+        "REGISTERED",
+        "VALIDATING",
+        "VALIDATED",
+        "INVALID",
+        "QUARANTINED",
+        "PROCESSING",
+        "PROCESSED",
+        "DELIVERING",
+        "DELIVERED",
+        "RETRY_PENDING",
+        "FAILED",
+        "COMPLETED",
+        "COMPLETED_WITH_DELIVERY_ERRORS"
+      ]
+    },
+    "source": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "display_path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+        },
+        "source_folder_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "file_id",
+        "display_path",
+        "source_folder_id",
+        "size_bytes",
+        "sha256"
+      ]
+    },
+    "destinations": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "destination_folder_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "display_path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024,
+            "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+          },
+          "route_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]{1,32}$"
+            }
+          },
+          "matched_tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]{1,32}$"
+            }
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "delivered",
+              "failed",
+              "skipped"
+            ]
+          },
+          "reason_code": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "destination_folder_id",
+          "display_path",
+          "route_tags",
+          "matched_tags",
+          "status",
+          "reason_code"
+        ]
+      }
+    },
+    "attempt_summary": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "validation_attempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "processing_attempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "delivery_attempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retry_attempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "last_attempt_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+        }
+      },
+      "required": [
+        "validation_attempts",
+        "processing_attempts",
+        "delivery_attempts",
+        "retry_attempts",
+        "last_attempt_at"
+      ]
+    },
+    "latest_error": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "error_code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]{2,64}$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "field": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 256
+        },
+        "resource_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid"
+        },
+        "current_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 64
+        },
+        "correlation_id": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "error_code",
+        "message",
+        "field",
+        "resource_id",
+        "current_state",
+        "correlation_id"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "updated_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "job_id",
+    "watcher_id",
+    "state",
+    "source",
+    "destinations",
+    "attempt_summary",
+    "latest_error",
+    "created_at",
+    "updated_at",
+    "correlation_id"
+  ],
+  "title": "JobDetailResponse"
+}

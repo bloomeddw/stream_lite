@@ -1,0 +1,16 @@
+{
+  "schema_version": "demo",
+  "theme_name": "default_light",
+  "color_tokens": {},
+  "status_dot_tokens": {},
+  "layout_profile": "operator_default",
+  "layout_sections": [
+    {
+      "section_id": "demo",
+      "visible": true,
+      "order": 1
+    }
+  ],
+  "refresh_interval_seconds": 1,
+  "_invalid_example_reason": "missing required field correlation_id"
+}

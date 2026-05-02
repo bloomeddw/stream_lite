@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "status": {
+      "enum": [
+        "ready",
+        "not_ready"
+      ]
+    },
+    "service": {
+      "const": "stream_lite_api"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9_.-]+)?$"
+    },
+    "checked_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "status",
+    "service",
+    "version",
+    "checked_at",
+    "correlation_id"
+  ],
+  "title": "HealthResponse"
+}

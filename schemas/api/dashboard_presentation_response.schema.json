@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "theme_name": {
+      "enum": [
+        "default_light",
+        "high_contrast"
+      ]
+    },
+    "color_tokens": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#?[A-Za-z0-9(),. %_-]+$"
+      }
+    },
+    "status_dot_tokens": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^#?[A-Za-z0-9(),. %_-]+$"
+      }
+    },
+    "layout_profile": {
+      "enum": [
+        "operator_default",
+        "reviewer_demo"
+      ]
+    },
+    "layout_sections": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "section_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]{1,64}$"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "section_id",
+          "visible",
+          "order"
+        ]
+      }
+    },
+    "refresh_interval_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 300
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "schema_version",
+    "theme_name",
+    "color_tokens",
+    "status_dot_tokens",
+    "layout_profile",
+    "layout_sections",
+    "refresh_interval_seconds",
+    "correlation_id"
+  ],
+  "title": "DashboardPresentationResponse"
+}

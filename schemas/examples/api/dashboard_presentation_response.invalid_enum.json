@@ -1,0 +1,19 @@
+{
+    "schema_version":  "1.0.0",
+    "theme_name":  "__invalid__",
+    "color_tokens":  {
+
+                     },
+    "status_dot_tokens":  {
+
+                          },
+    "layout_profile":  "operator_default",
+    "layout_sections":  {
+                            "section_id":  "demo",
+                            "visible":  true,
+                            "order":  1
+                        },
+    "refresh_interval_seconds":  1,
+    "correlation_id":  "22222222-2222-4222-8222-222222222222"
+}
+

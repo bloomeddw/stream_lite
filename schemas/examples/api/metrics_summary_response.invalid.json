@@ -1,0 +1,21 @@
+{
+  "job_counts": {
+    "VALIDATED": 1
+  },
+  "stage_durations_seconds": {
+    "validation_p95": 0.18
+  },
+  "queue_lag": {
+    "stream_lite.lifecycle": 0
+  },
+  "retry_counts": {
+    "scheduled": 0
+  },
+  "delivery_counts": {
+    "delivered": 0
+  },
+  "watcher_counts": {
+    "ACTIVE": 1
+  },
+  "_invalid_example_reason": "missing required field correlation_id"
+}

@@ -1,0 +1,142 @@
+{
+  "title": "JobStateChangedEvent",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurred_at": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "job_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "watcher_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "attempt_number": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "event_type": {
+      "const": "job.state_changed"
+    },
+    "producer": {
+      "const": "processor"
+    },
+    "payload": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "previous_state": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "DETECTED",
+            "STABILIZING",
+            "REGISTERED",
+            "VALIDATING",
+            "VALIDATED",
+            "INVALID",
+            "QUARANTINED",
+            "PROCESSING",
+            "PROCESSED",
+            "DELIVERING",
+            "DELIVERED",
+            "RETRY_PENDING",
+            "FAILED",
+            "COMPLETED",
+            "COMPLETED_WITH_DELIVERY_ERRORS",
+            null
+          ]
+        },
+        "new_state": {
+          "enum": [
+            "DETECTED",
+            "STABILIZING",
+            "REGISTERED",
+            "VALIDATING",
+            "VALIDATED",
+            "INVALID",
+            "QUARANTINED",
+            "PROCESSING",
+            "PROCESSED",
+            "DELIVERING",
+            "DELIVERED",
+            "RETRY_PENDING",
+            "FAILED",
+            "COMPLETED",
+            "COMPLETED_WITH_DELIVERY_ERRORS"
+          ]
+        },
+        "transition_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "stage_owner": {
+          "enum": [
+            "api",
+            "watcher",
+            "validator",
+            "processor",
+            "delivery",
+            "retry_scheduler",
+            "event_dispatcher",
+            "streamlit"
+          ]
+        }
+      },
+      "required": [
+        "previous_state",
+        "new_state",
+        "transition_reason",
+        "stage_owner"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "event_id",
+    "idempotency_key",
+    "correlation_id",
+    "occurred_at",
+    "job_id",
+    "watcher_id",
+    "attempt_number",
+    "event_type",
+    "producer",
+    "payload"
+  ]
+}

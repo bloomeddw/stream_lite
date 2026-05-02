@@ -1,0 +1,14 @@
+{
+  "purpose": "source",
+  "root": "/demo/path",
+  "items": [
+    {
+      "name": "demo",
+      "display_path": "/demo/path",
+      "is_directory": true,
+      "is_selectable": true,
+      "reason_code": "demo"
+    }
+  ],
+  "_invalid_example_reason": "missing required field correlation_id"
+}

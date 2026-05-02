@@ -1,0 +1,66 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "purpose": {
+      "enum": [
+        "source",
+        "destination"
+      ]
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^/(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "normalized_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^/(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "display_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "status": {
+      "enum": [
+        "green",
+        "yellow",
+        "red"
+      ]
+    },
+    "reason_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 64
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "purpose",
+    "path",
+    "normalized_path",
+    "display_path",
+    "status",
+    "reason_code",
+    "message",
+    "correlation_id"
+  ],
+  "title": "PathValidationResponse"
+}
