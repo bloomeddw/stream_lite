@@ -31,7 +31,6 @@ Stream Lite Documentation
 
    implementation/README
    implementation/CODEX_TASK_GUIDE
-   implementation/CODEX_DESTRUCTIVE_OPERATION_RULES
    implementation/naming_review
    implementation/development_environment
    implementation/wp_reference/WP05_FASTAPI_CONTROL_PLANE_MAP

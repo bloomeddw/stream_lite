@@ -13,10 +13,10 @@
     "file_id": "33333333-3333-4333-8333-333333333333",
     "validation_status": "quarantined",
     "reason_codes": [
-      "INVALID_EXTENSION"
+      "EXTENSION_NOT_ALLOWED"
     ],
     "quarantine_record_id": "33333333-3333-4333-8333-333333333333",
-    "quarantine_locator": "demo",
-    "operator_message": "demo"
+    "quarantine_locator": "/data/quarantine/watcher_id=33333333-3333-4333-8333-333333333333/date=2026-04-25/job_id=44444444-4444-4444-8444-444444444444/orders.exe",
+    "operator_message": "Source file /orders.exe uses an unsupported extension for WP-07 validation."
   }
 }

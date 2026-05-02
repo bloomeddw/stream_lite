@@ -7,8 +7,7 @@ Added repository-level Codex/agent safety guardrails after a completed Codex ses
 ## Files changed
 
 - `AGENTS.md`
-- `.codex/RULES.md`
-- `docs/implementation/CODEX_DESTRUCTIVE_OPERATION_RULES.md`
+- `AGENTS.md` and `RULES.md`
 - `docs/implementation/CODEX_TASK_GUIDE.md`
 - `docs/implementation/README.md`
 - `docs/index.rst`
@@ -24,7 +23,7 @@ Added repository-level Codex/agent safety guardrails after a completed Codex ses
 ## Decisions applied
 
 - Root `AGENTS.md` is the first agent instruction file for the repository.
-- `.codex/RULES.md` is the Codex-specific rule file.
+- `RULES.md` is the repo-owned rules file used by future agent runs.
 - Generated artifacts are excluded from patch packaging instead of being removed from the working tree by broad cleanup commands.
 - `.venv/` must not be deleted from a user's working copy by Codex cleanup; it should only be excluded from patch archives.
 
@@ -51,4 +50,4 @@ To roll back this guardrail patch, remove the added agent/rules documents and re
 
 ## Next step
 
-Restore the latest known-good repository state, apply this guardrail patch, verify contract lint and Sphinx docs, then reissue a shorter WP-07 prompt that references `AGENTS.md` and `.codex/RULES.md` before implementation.
+Restore the latest known-good repository state, apply this guardrail patch, verify contract lint and Sphinx docs, then reissue a shorter WP-07 prompt that references `AGENTS.md` and `RULES.md` before implementation.

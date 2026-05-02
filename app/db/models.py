@@ -670,6 +670,7 @@ class QuarantineRecordModel(Base, CreatedAtMixin, UpdatedAtMixin):
     reason_code: Mapped[str] = mapped_column(sa.String(64), nullable=False)
     copy_status: Mapped[str] = mapped_column(COPY_STATUS, nullable=False)
     checksum_sha256: Mapped[str | None] = mapped_column(sa.String(64))
+    copied_size_bytes: Mapped[int | None] = mapped_column(sa.BigInteger())
     operator_message: Mapped[str] = mapped_column(sa.String(512), nullable=False)
     correlation_id: Mapped[UUID] = mapped_column(sa.Uuid(as_uuid=True), nullable=False)
 

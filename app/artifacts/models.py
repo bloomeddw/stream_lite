@@ -58,6 +58,7 @@ class QuarantineRecord(SchemaModel):
     source_sha256: Sha256Hex
     reason_code: ErrorCode
     operator_message: Annotated[str, StringConstraints(min_length=1)]
+    quarantine_locator: Annotated[SafeLocator, StringConstraints(min_length=1)]
     quarantine_display_path: Annotated[SafeDisplayPath, StringConstraints(min_length=1)]
     copy_status: Literal["copied", "copy_failed", "not_copied_security_block"]
     created_at: Rfc3339Utc

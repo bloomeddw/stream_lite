@@ -3,7 +3,6 @@
 This directory contains implementation-readiness artifacts. They guide future Codex coding tasks but do not contain runtime implementation code.
 
 - `CODEX_TASK_GUIDE.md`: ordered Codex work packages with target files, requirements, schemas, tests, evidence, and rollback notes.
-- `CODEX_DESTRUCTIVE_OPERATION_RULES.md`: mandatory safety rules for agents; forbids broad cleanup/deletion and defines patch-only packaging guardrails.
 - `naming_review.md`: approved naming map for repositories, route handlers, workers, services, and module layout before coding begins.
 - `development_environment.md`: local virtual environment setup and verification commands for contract/Sphinx checks.
 - `wp_reference/WP05_FASTAPI_CONTROL_PLANE_MAP.md`: low-reasoning WP-05 implementation map for route modules, schemas, repositories, errors, tests, and completion criteria.

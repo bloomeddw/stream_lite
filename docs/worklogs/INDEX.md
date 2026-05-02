@@ -7,7 +7,11 @@ This index publishes retained WP-00 and requirements-cleanup worklogs, plus hist
 ```{toctree}
 :maxdepth: 1
 
+WORKLOG-20260502-wp07-migration-copied-size-fix
+WORKLOG-20260502-wp07-validation-test-fix
+WORKLOG-20260502-wp07-review-safety-and-quarantine-record-closure
 WORKLOG-20260501-codex-safety-guardrails
+WORKLOG-20260501-wp07-validation-quarantine
 WORKLOG-20260501-wp06-host-path-resolver-fix
 WORKLOG-20260501-wp06-watcher-test-path-portability
 WORKLOG-20260501-wp06-watcher-implementation

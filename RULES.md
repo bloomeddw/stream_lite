@@ -1,6 +1,6 @@
-# Stream Lite Codex Safety Rules
+# Stream Lite Agent Safety Rules
 
-These rules exist to prevent accidental repository deletion and high-token, high-risk cleanup behavior. They are subordinate to user instructions only when the user explicitly asks for destructive recovery and names the exact files or directories to remove.
+These repo-owned rules exist to prevent accidental repository deletion and high-token, high-risk cleanup behavior for every future Stream Lite work package. They apply to Codex, ChatGPT, shell agents, and any automated helper. They are subordinate to user instructions only when the user explicitly asks for destructive recovery and names the exact files or directories to remove.
 
 ## 1. Work in small, reversible patches
 
@@ -9,6 +9,15 @@ These rules exist to prevent accidental repository deletion and high-token, high
 - Do not reformat unrelated files.
 - Do not include prompts in zip patches.
 - Always add or update a worklog for non-trivial product/code/docs behavior changes, unless the user explicitly says not to create one for an instruction-only safety patch.
+
+## 1a. Critical safety addendum for all future work
+
+- Do not delete files from the working tree as a cleanup step.
+- Cleanup means excluding generated, cache, and vendor files from the final zip, not deleting them from the repo.
+- Do not delete `.venv`, `.pytest_vendor`, `pytest_vendor`, `docs/_build`, `.pytest_cache`, `__pycache__`, `tmp`, `.tmp`, `wheelhouse`, or `*.pyc` from the user workspace.
+- If generated/cache files exist, ignore them when building the patch zip.
+- If you believe deletion is required, stop and report the exact file list and reason. Do not execute deletion.
+- Do not use `git reset`, `git checkout`, or `git clean` to discard local work.
 
 ## 2. No broad deletion
 
@@ -35,7 +44,7 @@ Do not run any equivalent command, alias, script, or shell pipeline from the rep
 
 ## 3. Targeted cleanup loop ban
 
-A prior WP-07 run used a targeted-looking PowerShell cleanup command that built a `$targets` list from `$root = Resolve-Path '.'` and then ran `Remove-Item -Recurse -Force` for generated folders. It also included `.venv` and damaged the working copy. That exact command shape is forbidden.
+A prior run used a targeted-looking PowerShell cleanup command that built a `$targets` list from `$root = Resolve-Path '.'` and then ran `Remove-Item -Recurse -Force` for generated folders. It also included `.venv` and damaged the working copy. That exact command shape is forbidden for every future work package.
 
 Do not run commands that combine any of the following inside the repo:
 
@@ -123,3 +132,10 @@ If source files, docs, schemas, tests, migrations, evidence, or worklogs disappe
 3. Report the exact last action and current file status.
 4. Restore from the latest known-good zip/source control before applying any new patch.
 5. Add a recovery worklog once the repo is restored, unless the user explicitly asks only for rule changes and no recovery worklog.
+
+
+## 8. Single source of truth for agent rules
+
+- `AGENTS.md` and `RULES.md` are the only repo-owned agent instruction files.
+- Do not create or reference hidden agent rule folders for persistent instructions.
+- Do not create a separate destructive-operation rules document. Keep destructive-operation and packaging safety rules in `AGENTS.md` and `RULES.md`.

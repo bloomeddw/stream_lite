@@ -6,6 +6,19 @@ These instructions apply to the entire repository. They are mandatory for Codex,
 
 Stream Lite is requirements-first, patch-first, and restore-safe. Do not perform broad cleanup, broad deletion, or destructive repository reset operations. A coding task is not complete until the repository remains intact, tests are reported, generated artifacts are excluded from the deliverable, and a worklog is written when the task changes product/code/docs behavior.
 
+## Critical safety rules for all future work
+
+These rules are mandatory for every Stream Lite work package, patch, verification run, and packaging step:
+
+1. Do not delete files from the working tree as a cleanup step.
+2. Do not run `Remove-Item -Recurse`, `rm -rf`, `git clean`, `git reset --hard`, `rd /s`, `rmdir /s`, `del /s`, `find -delete`, or any cleanup loop based on `$root`, `$PWD`, `Resolve-Path .`, or repository-wide recursion.
+3. Cleanup means excluding generated/cache/vendor files from the final zip, not deleting them from the repo.
+4. Do not delete `.venv`, `.pytest_vendor`, `pytest_vendor`, `docs/_build`, `.pytest_cache`, `__pycache__`, `tmp`, `.tmp`, `wheelhouse`, or `*.pyc` from the user workspace. Leave them alone.
+5. If generated/cache files exist, ignore them when building the patch zip.
+6. If deletion appears required, stop and report the exact file list and reason. Do not execute deletion.
+7. Do not use `git reset`, `git checkout`, or `git clean` to discard local work.
+8. Before editing product code, inspect `AGENTS.md` and `RULES.md`; these are the repo-owned agent instruction sources. Do not create additional hidden agent rule folders.
+
 ## Required reading before code changes
 
 Before modifying files, read:
@@ -18,7 +31,7 @@ Before modifying files, read:
 
 If any of these files are missing after a destructive operation, stop and report recovery steps instead of continuing.
 
-## Destructive-command ban
+## Destructive-command ban for all future work
 
 Never run any command that can recursively delete or reset the repository, including but not limited to:
 
@@ -32,7 +45,7 @@ Never run any command that can recursively delete or reset the repository, inclu
 
 Generated artifacts must be excluded from zip patches, not removed from the working tree with broad deletes.
 
-## No working-tree cleanup after verification
+## No working-tree cleanup after verification for any work package
 
 After tests pass, do not run deletion cleanup in the user's working tree. This includes targeted-looking cleanup loops such as removing `docs/_build`, `.pytest_cache`, vendor folders, `__pycache__`, `*.pyc`, or `pytest-cache-files-*` with `Remove-Item`, `rm`, `del`, `find -delete`, or scripts.
 
@@ -43,7 +56,7 @@ Instead:
 3. Inspect the zip content listing.
 4. Leave the working tree intact.
 
-This rule exists because a prior WP-07 run used a targeted PowerShell cleanup command with `Remove-Item -Recurse`; it included `.venv` and removed required files/evidence. That pattern is forbidden even when the command appears to list generated paths.
+This rule exists because a prior run used a targeted PowerShell cleanup command with `Remove-Item -Recurse`; it included `.venv` and removed required files/evidence. That pattern is forbidden for every future work package even when the command appears to list only generated paths.
 
 ## Safe cleanup policy
 

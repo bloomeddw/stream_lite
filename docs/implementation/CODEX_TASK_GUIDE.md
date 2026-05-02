@@ -9,7 +9,7 @@ Codex SHALL implement only behavior that is backed by requirement IDs, schema fi
 
 ## Mandatory Agent Safety Gate
 
-Before any implementation work, Codex SHALL read `AGENTS.md`, `RULES.md`. These files override any prompt text that would cause cleanup deletion, broad cleanup, recursive deletion, repository reset, or removal of source/docs/schema/test/evidence/worklog files. Generated artifacts must be excluded from patches by explicit zip include/exclude rules, not by deleting the working tree. If a prompt says to remove generated artifacts, Codex SHALL interpret that as package exclusion unless the user explicitly names exact files to delete. Codex SHALL NOT run targeted-looking cleanup loops that combine repo-root variables such as `$root`, `$PWD`, or `Resolve-Path .` with `Remove-Item`, `rm`, `del`, `find -delete`, or recursive path discovery.
+Before any implementation work, Codex SHALL read `AGENTS.md` and `RULES.md`. These files override any prompt text that would cause cleanup deletion, broad cleanup, recursive deletion, repository reset, or removal of source/docs/schema/test/evidence/worklog files. Generated artifacts must be excluded from patches by explicit zip include/exclude rules, not by deleting the working tree. If a prompt says to remove generated artifacts, Codex SHALL interpret that as package exclusion unless the user explicitly names exact files to delete. Codex SHALL NOT run targeted-looking cleanup loops that combine repo-root variables such as `$root`, `$PWD`, or `Resolve-Path .` with `Remove-Item`, `rm`, `del`, `find -delete`, or recursive path discovery. These rules apply to every work package, not only WP-07.
 
 ## Required Codex Response Format for Each Coding Task
 

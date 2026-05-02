@@ -12,6 +12,7 @@
     "source_sha256",
     "reason_code",
     "operator_message",
+    "quarantine_locator",
     "quarantine_display_path",
     "copy_status",
     "created_at",
@@ -44,6 +45,10 @@
     },
     "operator_message": {
       "type": "string"
+    },
+    "quarantine_locator": {
+      "type": "string",
+      "pattern": "^(?!file://)(?![A-Za-z]:)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
     },
     "quarantine_display_path": {
       "type": "string",

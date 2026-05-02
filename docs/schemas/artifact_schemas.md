@@ -19,7 +19,7 @@ Artifact schemas are implementation contracts for persisted processing, delivery
 |---|---|---|---|---|
 | `ProcessingSummary` | `schemas/artifacts/processing_summary.schema.json` | `schema_version`, `job_id`, `engine`, `engine_version`, `input_locator`, `output_locator`, `started_at`, `completed_at`, `duration_seconds`, `status`, `correlation_id` | `row_count`, `record_count`, and `byte_count` may be `null` when not available. | `schemas/examples/artifacts/processing_summary.valid.json` |
 | `OutputManifest` | `schemas/artifacts/output_manifest.schema.json` | `schema_version`, `job_id`, `watcher_id`, `source_sha256`, `processing_summary_locator`, `destination_outcomes`, `status`, `created_at`, `correlation_id` | Destination outcomes remain schema-owned objects; runtime code shall not invent undocumented fields. | `schemas/examples/artifacts/output_manifest.valid.json` |
-| `QuarantineRecord` | `schemas/artifacts/quarantine_record.schema.json` | `schema_version`, `job_id`, `watcher_id`, `source_display_path`, `source_sha256`, `reason_code`, `operator_message`, `quarantine_display_path`, `copy_status`, `created_at`, `correlation_id` | Operator-facing paths must stay sanitized. | `schemas/examples/artifacts/quarantine_record.valid.json` |
+| `QuarantineRecord` | `schemas/artifacts/quarantine_record.schema.json` | `schema_version`, `job_id`, `watcher_id`, `source_display_path`, `source_sha256`, `reason_code`, `operator_message`, `quarantine_locator`, `quarantine_display_path`, `copy_status`, `created_at`, `correlation_id` | Operator-facing paths must stay sanitized and locators must remain container-safe. | `schemas/examples/artifacts/quarantine_record.valid.json` |
 
 ## Example Fixture Rule
 

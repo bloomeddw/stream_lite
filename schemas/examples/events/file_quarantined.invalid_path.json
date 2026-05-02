@@ -12,10 +12,12 @@
     "payload":  {
                     "file_id":  "33333333-3333-4333-8333-333333333333",
                     "validation_status":  "quarantined",
-                    "reason_codes":  "INVALID_EXTENSION",
+                    "reason_codes":  [
+                                         "EXTENSION_NOT_ALLOWED"
+                                     ],
                     "quarantine_record_id":  "33333333-3333-4333-8333-333333333333",
                     "quarantine_locator":  "C:\\Users\\alice\\Desktop\\drop",
-                    "operator_message":  "demo"
+                    "operator_message":  "Source file /orders.exe uses an unsupported extension for WP-07 validation."
                 }
 }
 

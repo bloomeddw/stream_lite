@@ -8,22 +8,17 @@ STDOUT:
 [01mmyst v4.0.1:[39;49;00m MdParserConfig(commonmark_only=False, gfm_only=False, enable_extensions=set(), disable_syntax=[], all_links_external=False, links_external_new_tab=False, url_schemes=('http', 'https', 'mailto', 'ftp'), ref_domains=None, fence_as_directive=set(), number_code_blocks=[], title_to_header=False, heading_anchors=0, heading_slug_func=None, html_meta={}, footnote_sort=True, footnote_transition=True, words_per_minute=200, substitutions={}, linkify_fuzzy_links=True, dmath_allow_labels=True, dmath_allow_space=True, dmath_allow_digits=True, dmath_double_inline=False, update_mathjax=True, mathjax_classes='tex2jax_process|mathjax_process|math|output_area', enable_checkboxes=False, suppress_warnings=[], highlight_code_blocks=True)
 [01mbuilding [mo]: [39;49;00mtargets for 0 po files that are out of date
 [01mwriting output... [39;49;00m
-[01mbuilding [html]: [39;49;00mtargets for 6 source files that are out of date
-[01mupdating environment: [39;49;00m4 added, 6 changed, 0 removed
-[2K[01mreading sources... [39;49;00m[ 10%] [35mimplementation/CODEX_TASK_GUIDE[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 20%] [35mimplementation/README[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 30%] [35mimplementation/WP06_VERIFICATION_PLAN[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 40%] [35mindex[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 50%] [35mreqs/REQUIREMENT_REFERENCE_INVENTORY[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 60%] [35mverification/evidence/schema_fixture_validation[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 70%] [35mworklogs/INDEX[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 80%] [35mworklogs/WORKLOG-20260501-wp06-start-readiness[39;49;00m
-[2K[01mreading sources... [39;49;00m[ 90%] [35mworklogs/WORKLOG-20260501-wp06-watcher-implementation[39;49;00m
-[2K[01mreading sources... [39;49;00m[100%] [35mworklogs/WORKLOG-20260501-wp06-watcher-test-path-portability[39;49;00m
+[01mbuilding [html]: [39;49;00mtargets for 3 source files that are out of date
+[01mupdating environment: [39;49;00m1 added, 3 changed, 0 removed
+[2K[01mreading sources... [39;49;00m[ 25%] [35mreqs/REQUIREMENT_REFERENCE_INVENTORY[39;49;00m
+[2K[01mreading sources... [39;49;00m[ 50%] [35mverification/evidence/schema_fixture_validation[39;49;00m
+[2K[01mreading sources... [39;49;00m[ 75%] [35mworklogs/INDEX[39;49;00m
+[2K[01mreading sources... [39;49;00m[100%] [35mworklogs/WORKLOG-20260502-wp07-migration-copied-size-fix[39;49;00m
 
 [01mlooking for now-outdated files... [39;49;00mnone found
 [01mpickling environment... [39;49;00mdone
-[01mchecking consistency... [39;49;00mC:\Users\asosa\stream_lite\docs\worklogs\WORKLOG-20260501-wp05-cleanup-followup-patch.md: document is referenced in multiple toctrees: ['worklogs/INDEX', 'worklogs/INDEX'], selecting: worklogs/INDEX <- worklogs/WORKLOG-20260501-wp05-cleanup-followup-patch
+[01mchecking consistency... [39;49;00mC:\Users\asosa\stream_lite\docs\worklogs\WORKLOG-20260501-codex-safety-guardrails.md: document is referenced in multiple toctrees: ['worklogs/INDEX', 'worklogs/INDEX'], selecting: worklogs/INDEX <- worklogs/WORKLOG-20260501-codex-safety-guardrails
+C:\Users\asosa\stream_lite\docs\worklogs\WORKLOG-20260501-wp05-cleanup-followup-patch.md: document is referenced in multiple toctrees: ['worklogs/INDEX', 'worklogs/INDEX'], selecting: worklogs/INDEX <- worklogs/WORKLOG-20260501-wp05-cleanup-followup-patch
 done
 [01mpreparing documents... [39;49;00mdone
 [01mcopying assets... [39;49;00m
@@ -36,26 +31,22 @@ Writing evaluated template result to C:\Users\asosa\stream_lite\docs\_build\html
 [01mcopying extra files... [39;49;00m
 [01mcopying extra files: [39;49;00mdone
 [01mcopying assets: [39;49;00mdone
-[2K[01mwriting output... [39;49;00m[  8%] [32mimplementation/CODEX_TASK_GUIDE[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 17%] [32mimplementation/README[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 25%] [32mimplementation/WP06_VERIFICATION_PLAN[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 33%] [32mindex[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 42%] [32mreqs/INDEX[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 50%] [32mreqs/REQUIREMENT_REFERENCE_INVENTORY[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 58%] [32mverification/evidence/schema_fixture_validation[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 67%] [32mverification/evidence_index[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 75%] [32mworklogs/INDEX[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 83%] [32mworklogs/WORKLOG-20260501-wp06-start-readiness[39;49;00m
-[2K[01mwriting output... [39;49;00m[ 92%] [32mworklogs/WORKLOG-20260501-wp06-watcher-implementation[39;49;00m
-[2K[01mwriting output... [39;49;00m[100%] [32mworklogs/WORKLOG-20260501-wp06-watcher-test-path-portability[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 14%] [32mindex[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 29%] [32mreqs/INDEX[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 43%] [32mreqs/REQUIREMENT_REFERENCE_INVENTORY[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 57%] [32mverification/evidence/schema_fixture_validation[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 71%] [32mverification/evidence_index[39;49;00m
+[2K[01mwriting output... [39;49;00m[ 86%] [32mworklogs/INDEX[39;49;00m
+[2K[01mwriting output... [39;49;00m[100%] [32mworklogs/WORKLOG-20260502-wp07-migration-copied-size-fix[39;49;00m
 
 [01mgenerating indices... [39;49;00mgenindex done
 [01mwriting additional pages... [39;49;00msearch done
 [01mdumping search index in English (code: en)... [39;49;00mdone
 [01mdumping object inventory... [39;49;00mdone
-[01mbuild succeeded.[39;49;00m
+[01mbuild succeeded, 1 warning.[39;49;00m
 
 The HTML pages are in docs\_build\html.
 
 
 STDERR:
+[91mC:\Users\asosa\stream_lite\docs\implementation\CODEX_DESTRUCTIVE_OPERATION_RULES.md: WARNING: document isn't included in any toctree [toc.not_included][39;49;00m

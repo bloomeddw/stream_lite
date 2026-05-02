@@ -70,6 +70,7 @@ class ValidationRepository(RepositoryBase):
         source_sha256: str | None = None,
         quarantine_display_path: str | None = None,
         checksum_sha256: str | None = None,
+        copied_size_bytes: int | None = None,
     ) -> QuarantineRecordModel:
         record = QuarantineRecordModel(
             quarantine_record_id=self._ensure_uuid(quarantine_record_id),
@@ -87,6 +88,7 @@ class ValidationRepository(RepositoryBase):
             reason_code=reason_code,
             copy_status=copy_status,
             checksum_sha256=checksum_sha256,
+            copied_size_bytes=copied_size_bytes,
             operator_message=operator_message,
             correlation_id=self._ensure_uuid(correlation_id),
         )
