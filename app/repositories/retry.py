@@ -13,6 +13,9 @@ from .base import RepositoryBase
 
 
 class RetryRepository(RepositoryBase):
+    def get_retry_schedule(self, retry_schedule_id: UUID | str) -> RetryScheduleModel | None:
+        return self.session.get(RetryScheduleModel, self._ensure_uuid(retry_schedule_id))
+
     def schedule_retry(
         self,
         *,
@@ -60,11 +63,35 @@ class RetryRepository(RepositoryBase):
         )
         return list(self.session.scalars(statement))
 
+    def mark_retry_attempted(self, retry_schedule_id: UUID | str) -> RetryScheduleModel:
+        record = self.get_retry_schedule(retry_schedule_id)
+        if record is None:
+            raise ValueError("retry schedule not found")
+        record.status = "attempted"
+        record.updated_at = self._now()
+        self.session.flush()
+        return record
+
     def mark_retry_exhausted(self, retry_schedule_id: UUID | str, *, last_error_code: str | None = None) -> RetryScheduleModel:
-        record = self.session.get(RetryScheduleModel, self._ensure_uuid(retry_schedule_id))
+        record = self.get_retry_schedule(retry_schedule_id)
         if record is None:
             raise ValueError("retry schedule not found")
         record.status = "exhausted"
+        record.last_error_code = last_error_code
+        record.updated_at = self._now()
+        self.session.flush()
+        return record
+
+    def mark_retry_failed(
+        self,
+        retry_schedule_id: UUID | str,
+        *,
+        last_error_code: str | None = None,
+    ) -> RetryScheduleModel:
+        record = self.get_retry_schedule(retry_schedule_id)
+        if record is None:
+            raise ValueError("retry schedule not found")
+        record.status = "failed"
         record.last_error_code = last_error_code
         record.updated_at = self._now()
         self.session.flush()

@@ -11,6 +11,56 @@ Codex SHALL implement only behavior that is backed by requirement IDs, schema fi
 
 Before any implementation work, Codex SHALL read `AGENTS.md` and `RULES.md`. These files override any prompt text that would cause cleanup deletion, broad cleanup, recursive deletion, repository reset, or removal of source/docs/schema/test/evidence/worklog files. Generated artifacts must be excluded from patches by explicit zip include/exclude rules, not by deleting the working tree. If a prompt says to remove generated artifacts, Codex SHALL interpret that as package exclusion unless the user explicitly names exact files to delete. Codex SHALL NOT run targeted-looking cleanup loops that combine repo-root variables such as `$root`, `$PWD`, or `Resolve-Path .` with `Remove-Item`, `rm`, `del`, `find -delete`, or recursive path discovery. These rules apply to every work package, not only WP-07.
 
+
+## Low-Reasoning Allocated Work Standard
+
+Codex SHALL receive implementation prompts as allocated work tickets, not broad discovery requests. The default implementation mode is low reasoning: execute the fixed contract, avoid an upfront plan, avoid progress preambles, and report only the required outcome. Use higher reasoning only for explicit design, debugging, migration, or cross-package ambiguity.
+
+A Codex handoff prompt SHOULD include these sections:
+
+```text
+Task:
+Reasoning effort: low; do not produce an upfront plan.
+Current state:
+Hard scope:
+  Implement:
+  Do not implement:
+Safety invariants:
+Required reads before editing:
+Reference only if needed:
+Create:
+Modify only if required:
+Behavior contract:
+Data/schema contract:
+State/event/observability contract:
+Tests:
+Verification order:
+Packaging:
+Stop conditions:
+Final response:
+```
+
+The prompt SHOULD NOT ask Codex to compare architectures, propose alternatives, redesign repositories, redesign schemas, change the state machine, infer later work packages, or perform broad cleanup. Codex SHALL use the nearest existing pattern and make the smallest safe change that satisfies the allocated contract.
+
+## File-Reading and Context-Budget Rules
+
+Codex SHALL use tiered reading to reduce token and reasoning cost:
+
+1. Required before editing: `AGENTS.md`, `RULES.md`, this guide, the current WP reference, and files/interfaces directly edited.
+2. Reference only if needed: broad requirement docs, operations docs, verification matrices, schema docs, and historical worklogs.
+3. Use targeted search and narrow line ranges instead of printing full large files.
+4. Stop after two failed attempts on the same failing test and report the exact blocker.
+
+If a prompt requires more than one major implementation surface, Codex SHALL recommend splitting the task into sequential prompts before coding. Recommended splits include adapter-only, worker/service-only, contract/schema/docs, and verification/packaging.
+
+## Verification Order for Low-Reasoning Tasks
+
+Codex SHOULD run the narrowest relevant tests first, then contract/schema checks, then broader suites only after targeted checks pass. Full test suites and release-gate reports should be reserved for work-package closure or explicit user request.
+
+## Compact Response Mode
+
+For routine implementation tasks, Codex SHOULD report: scope, files changed, tests run, failures/blockers, and verdict. Use the detailed response table below for release gates, contract changes, broad WP closure, or failed verification.
+
 ## Required Codex Response Format for Each Coding Task
 
 Each Codex implementation response SHALL include:

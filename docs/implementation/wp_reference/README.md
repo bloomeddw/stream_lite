@@ -10,6 +10,7 @@ Use these maps after WP-05 is complete and verified:
 | WP-07 | `WP07_VALIDATION_QUARANTINE_REFERENCE.md` | File validation, validation attempts, quarantine artifact creation, quarantine copy behavior, and validation events. |
 | WP-08 | `WP08_PROCESSING_REFERENCE.md` | Processing stage claim, Spark-profile processing adapter, processing attempts, processing artifacts, and processing events. |
 | WP-09 | `WP09_DELIVERY_REFERENCE.md` | Delivery fanout, destination outcomes, output manifest writing, and delivery events. |
+| WP-09 low-reasoning split | `WP09_LOW_REASONING_DELIVERY_MICROPLAN.md` | Two-step WP09-A/WP09-B map separating routing/filesystem/manifest work from worker/state/event integration. |
 | WP-10 | `WP10_RETRY_REFERENCE.md` | Retry classification, backoff, retry scheduling, exhausted retry behavior, and manual retry command primitives. |
 | WP-11 | `WP11_STREAMLIT_REFERENCE.md` | API-backed Streamlit command center pages, controls, state polling, theme/layout use, and manual evidence. |
 | WP-12 | `WP12_OBSERVABILITY_REFERENCE.md` | Metrics, structured logs, redaction, operational summaries, health observations, and API/dashboard integration points. |

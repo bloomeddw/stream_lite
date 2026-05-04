@@ -31,6 +31,38 @@ Before modifying files, read:
 
 If any of these files are missing after a destructive operation, stop and report recovery steps instead of continuing.
 
+
+## Low-reasoning implementation discipline
+
+For Codex implementation handoffs, default to allocated, low-reasoning work prompts. A prompt should define one work package or one narrow slice of a work package with fixed contracts so Codex can execute without architecture debate.
+
+Use this structure for future allocated work prompts:
+
+1. `Task`: one sentence.
+2. `Reasoning effort`: low; no upfront plan or progress preambles.
+3. `Current state`: only facts required to continue safely.
+4. `Hard scope`: implement and do-not-implement lists.
+5. `Safety invariants`: deletion, cleanup, prompt, and packaging rules.
+6. `Required reads before editing`: only safety files, the current WP reference, and directly edited interfaces.
+7. `Reference only if needed`: requirement, operations, schema, and verification docs used only to resolve conflicts or failing tests.
+8. `Create` and `Modify only if required`: explicit file lists.
+9. `Behavior/data/state/event contracts`: closed-form requirements, not exploratory design.
+10. `Tests`, `verification order`, `packaging`, `stop conditions`, and `final response`.
+
+Do not ask Codex to compare architectures, propose alternatives, or redesign existing repositories, schemas, state machines, event models, or workflows unless the user explicitly requests design work. Use the nearest existing project pattern and make the smallest safe change. If a task touches multiple work packages or more than one major surface area, split it into sequential prompts such as adapter-only, worker-only, contract/docs, and verification/packaging.
+
+## Context-budget and file-reading discipline
+
+Prefer tiered reading over large mandatory read lists:
+
+- Always read `AGENTS.md`, `RULES.md`, and `docs/implementation/CODEX_TASK_GUIDE.md`.
+- Read the current work-package reference and directly edited contracts before code changes.
+- Put broad requirement, operations, schema, and verification documents in `Reference only if needed`.
+- Use targeted search and narrow line ranges instead of dumping large files.
+- Stop after two failed attempts on the same failing test and report the exact blocker.
+
+Routine implementation reports should be compact. Use the full detailed report only for release gates, broad patches, or when failures/gaps need traceability.
+
 ## Destructive-command ban for all future work
 
 Never run any command that can recursively delete or reset the repository, including but not limited to:

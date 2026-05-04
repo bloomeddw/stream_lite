@@ -186,6 +186,39 @@ class WatcherRepository(RepositoryBase):
         self.session.flush()
         return created
 
+
+    def update_source_health(
+        self,
+        source_folder_id: UUID | str,
+        *,
+        health_status: str,
+        reason_code: str | None,
+    ) -> WatcherSourceModel:
+        record = self.session.get(WatcherSourceModel, self._ensure_uuid(source_folder_id))
+        if record is None:
+            raise ValueError("watcher source not found")
+        record.health_status = health_status
+        record.reason_code = reason_code
+        record.updated_at = self._now()
+        self.session.flush()
+        return record
+
+    def update_destination_health(
+        self,
+        destination_folder_id: UUID | str,
+        *,
+        health_status: str,
+        reason_code: str | None,
+    ) -> WatcherDestinationModel:
+        record = self.session.get(WatcherDestinationModel, self._ensure_uuid(destination_folder_id))
+        if record is None:
+            raise ValueError("watcher destination not found")
+        record.health_status = health_status
+        record.reason_code = reason_code
+        record.updated_at = self._now()
+        self.session.flush()
+        return record
+
     def list_route_matches(self, watcher_id: UUID | str) -> list[WatcherRouteMatchModel]:
         statement = (
             sa.select(WatcherRouteMatchModel)

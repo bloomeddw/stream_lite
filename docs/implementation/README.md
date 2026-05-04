@@ -7,6 +7,7 @@ This directory contains implementation-readiness artifacts. They guide future Co
 - `development_environment.md`: local virtual environment setup and verification commands for contract/Sphinx checks.
 - `wp_reference/WP05_FASTAPI_CONTROL_PLANE_MAP.md`: low-reasoning WP-05 implementation map for route modules, schemas, repositories, errors, tests, and completion criteria.
 - `wp_reference/WP05_LOW_REASONING_CHECKLIST.md`: fixed implementation order, route response rules, repository use map, tests, and stop conditions for WP-05.
+- `wp_reference/WP09_LOW_REASONING_DELIVERY_MICROPLAN.md`: split WP-09 into routing/filesystem/manifest and worker/state/event subpackages to reduce Codex reasoning and overreach risk.
 - `WP05_CODEX_PROMPT.md`: ready-to-use Codex prompt for WP-05 after WP-04 completes.
 - `WP06_VERIFICATION_PLAN.md`: post-implementation test and evidence checklist for WP-06 watcher work.
 - `wp_reference/`: low-reasoning reference maps for WP-06 through WP-14. These are supporting documents only; they are not prompts and do not authorize starting follow-on work before earlier work packages are complete.

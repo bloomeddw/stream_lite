@@ -43,6 +43,7 @@ Stream Lite Documentation
    implementation/wp_reference/WP07_VALIDATION_QUARANTINE_REFERENCE
    implementation/wp_reference/WP08_PROCESSING_REFERENCE
    implementation/wp_reference/WP09_DELIVERY_REFERENCE
+   implementation/wp_reference/WP09_LOW_REASONING_DELIVERY_MICROPLAN
    implementation/wp_reference/WP10_RETRY_REFERENCE
    implementation/wp_reference/WP11_STREAMLIT_REFERENCE
    implementation/wp_reference/WP12_OBSERVABILITY_REFERENCE

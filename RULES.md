@@ -116,12 +116,41 @@ zip content listing proves no generated/cache/vendor artifacts are included
 
 ## 6. Context-budget discipline
 
-To avoid wasting Codex time:
+To avoid wasting Codex time and reasoning tokens:
 
+- Use allocated work prompts: one work package or one narrow implementation slice per prompt.
+- Split broad tasks into sequential prompts, for example adapter-only, worker-only, contract/docs, then verification/packaging.
 - Read the specific files named by the work package first.
+- Use tiered file reads: required before editing, then reference-only-if-needed.
 - Do not dump large docs into the prompt or terminal output.
 - Use targeted search such as `grep`, `Select-String`, or opening narrow line ranges.
-- Stop and ask for a smaller task if the task spans multiple work packages.
+- Stop and ask for a smaller task if the task spans multiple work packages or unrelated surfaces.
+
+## 6a. Low-reasoning prompt structure
+
+Future Codex prompts should be closed-form execution tickets, not open-ended design requests, unless the user explicitly asks for design. Include:
+
+```text
+Task
+Reasoning effort: low; no upfront plan
+Current state
+Hard scope: implement / do not implement
+Safety invariants
+Required reads before editing
+Reference only if needed
+Create / modify-only-if-required file lists
+Behavior, data, state, event, and observability contracts
+Tests and verification order
+Packaging rules
+Stop conditions
+Final response format
+```
+
+Do not ask Codex to evaluate alternative architectures, redesign existing systems, or infer future work. Codex should use existing patterns, make the smallest safe change, and stop when requirements or contracts conflict.
+
+## 6b. Response-size discipline
+
+Routine implementation responses should use a compact report: scope, files changed, tests run, failures or blockers, and verdict. Use the full traceability report only for release gates, failed verification, contract changes, or broad work-package closure.
 
 ## 7. Recovery if damage occurs
 

@@ -28,6 +28,8 @@ class ProcessingSummary(ExtensibleSchemaModel):
     engine_version: str
     input_locator: Annotated[SafeLocator, StringConstraints(min_length=1)]
     output_locator: Annotated[SafeLocator, StringConstraints(min_length=1)]
+    source_sha256: Sha256Hex
+    processor_version: str
     row_count: Annotated[int | None, Field(ge=0)] = None
     record_count: Annotated[int | None, Field(ge=0)] = None
     byte_count: Annotated[int | None, Field(ge=0)] = None
@@ -43,9 +45,14 @@ class OutputManifest(SchemaModel):
     job_id: UUID
     watcher_id: UUID
     source_sha256: Sha256Hex
+    processor_version: str
     processing_summary_locator: Annotated[SafeLocator, StringConstraints(min_length=1)]
+    produced_output_locators: list[Annotated[SafeLocator, StringConstraints(min_length=1)]]
+    started_at: Rfc3339Utc
+    completed_at: Rfc3339Utc
+    duration_seconds: Annotated[int, Field(ge=0)]
     destination_outcomes: list[JsonObject]
-    status: Literal["delivered", "completed_with_delivery_errors", "failed"]
+    status: Literal["processed", "delivered", "completed_with_delivery_errors", "failed"]
     created_at: Rfc3339Utc
     correlation_id: UUID
 

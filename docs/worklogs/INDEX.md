@@ -7,6 +7,20 @@ This index publishes retained WP-00 and requirements-cleanup worklogs, plus hist
 ```{toctree}
 :maxdepth: 1
 
+WORKLOG-20260503-wp10b-delivery-no-match-reentry-fix
+WORKLOG-20260503-wp10a-retry-policy-alias-closure
+WORKLOG-20260503-wp10a-retry-classifier-requirement-closure
+WORKLOG-20260503-wp10a-retry-classifier-backoff
+WORKLOG-20260503-wp10b-retry-worker-reentry-closure
+WORKLOG-20260503-wp10b-retry-scheduler
+WORKLOG-20260503-wp09-delivery-review-closure
+WORKLOG-20260502-wp09b-delivery-worker
+WORKLOG-20260502-wp09a-delivery-routing-filesystem-manifest
+WORKLOG-20260502-wp09-low-reasoning-microplan
+WORKLOG-20260502-wp08-processing-summary-metadata-closure
+WORKLOG-20260502-wp08-spark-adapter-clock-fix
+WORKLOG-20260502-wp08-processing-review-fix
+WORKLOG-20260502-wp08-processing-worker
 WORKLOG-20260502-wp07-migration-copied-size-fix
 WORKLOG-20260502-wp07-validation-test-fix
 WORKLOG-20260502-wp07-review-safety-and-quarantine-record-closure

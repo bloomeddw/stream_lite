@@ -1,4 +1,3 @@
-
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://stream-lite.local/schemas/artifacts/processing_summary.schema.json",
@@ -11,6 +10,8 @@
     "engine_version",
     "input_locator",
     "output_locator",
+    "source_sha256",
+    "processor_version",
     "started_at",
     "completed_at",
     "duration_seconds",
@@ -82,6 +83,15 @@
     "correlation_id": {
       "type": "string",
       "format": "uuid"
+    },
+    "source_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "processor_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
     }
   }
 }
