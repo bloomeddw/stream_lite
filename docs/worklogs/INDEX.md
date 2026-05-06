@@ -7,6 +7,9 @@ This index publishes retained WP-00 and requirements-cleanup worklogs, plus hist
 ```{toctree}
 :maxdepth: 1
 
+WORKLOG-20260505-wp11a-streamlit-foundation-warning-token-fix
+WORKLOG-20260504-wp11a-streamlit-foundation
+WORKLOG-20260504-wp10c-manual-retry
 WORKLOG-20260503-wp10b-delivery-no-match-reentry-fix
 WORKLOG-20260503-wp10a-retry-policy-alias-closure
 WORKLOG-20260503-wp10a-retry-classifier-requirement-closure

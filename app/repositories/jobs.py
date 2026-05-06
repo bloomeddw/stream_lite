@@ -25,7 +25,7 @@ ALLOWED_JOB_TRANSITIONS: dict[str, set[str]] = {
     "RETRY_PENDING": {"VALIDATING", "PROCESSING", "DELIVERING", "FAILED"},
     "COMPLETED_WITH_DELIVERY_ERRORS": set(),
     "COMPLETED": set(),
-    "FAILED": set(),
+    "FAILED": {"RETRY_PENDING"},
     "QUARANTINED": set(),
 }
 

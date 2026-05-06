@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from fastapi.testclient import TestClient
 
 from app import generate_uuid
+from app.db.models import RetryScheduleModel
 from app.repositories.jobs import JobRepository
 from app.repositories.processing import ProcessingRepository
 from tests.api.test_app_factory import build_test_app, seed_job, seed_watcher, session_for_app
@@ -118,6 +119,21 @@ def test_retry_persists_command(sqlite_engine) -> None:
 
     assert response.status_code == 202
     assert response.json()["target_resource_type"] == "job"
+    with session_for_app(app) as session:
+        refreshed_job = JobRepository(session).get_job(job.job_id)
+        schedules = (
+            session.query(RetryScheduleModel)
+            .filter(RetryScheduleModel.job_id == job.job_id)
+            .order_by(RetryScheduleModel.created_at.asc())
+            .all()
+        )
+
+    assert refreshed_job is not None and refreshed_job.state == "RETRY_PENDING"
+    assert refreshed_job.attempt_number == 2
+    assert len(schedules) == 1
+    assert schedules[0].failed_stage == "processing"
+    assert schedules[0].next_stage == "processing"
+    assert schedules[0].attempt_number == 2
 
 
 def test_retry_rejects_non_retryable_job(sqlite_engine) -> None:

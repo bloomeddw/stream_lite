@@ -17,6 +17,7 @@ from app.api.dependencies import (
     PaginationParams,
     get_command_repository,
     get_delivery_repository,
+    get_event_outbox_repository,
     get_idempotency_key,
     get_job_repository,
     get_operational_log_repository,
@@ -51,12 +52,15 @@ from app.db.models import (
 )
 from app.repositories.commands import CommandRepository
 from app.repositories.delivery import DeliveryRepository
+from app.repositories.events import EventOutboxRepository
 from app.repositories.jobs import JobRepository
 from app.repositories.observability import OperationalLogRepository
 from app.repositories.processing import ProcessingRepository
 from app.repositories.retry import RetryRepository
 from app.repositories.validation import ValidationRepository
 from app.repositories.watchers import WatcherRepository
+from app.retry import BackoffPolicy, RetryClassifier, RetryScheduler
+from app.retry.manual import ManualRetryError, ManualRetryService
 
 router = APIRouter(prefix="/jobs")
 
@@ -83,15 +87,6 @@ _TERMINAL_STATES = {
     "COMPLETED_WITH_DELIVERY_ERRORS",
     "QUARANTINED",
 }
-_NON_RETRYABLE_CODES = {
-    "EXTENSION_NOT_ALLOWED",
-    "FILE_EMPTY",
-    "FILE_TOO_LARGE",
-    "PATH_POLICY_VIOLATION",
-    "SCHEMA_INVALID",
-}
-
-
 @router.get("", response_model=JobListResponse)
 def list_jobs(
     watcher_id: str | None = Query(default=None),
@@ -248,6 +243,8 @@ def request_retry(
     payload: RetryCommandRequest,
     repository: Annotated[JobRepository, Depends(get_job_repository)],
     command_repository: Annotated[CommandRepository, Depends(get_command_repository)],
+    event_repository: Annotated[EventOutboxRepository, Depends(get_event_outbox_repository)],
+    retry_repository: Annotated[RetryRepository, Depends(get_retry_repository)],
     log_repository: Annotated[OperationalLogRepository, Depends(get_operational_log_repository)],
     settings: Annotated[StreamLiteSettings, Depends(get_settings)],
     idempotency_key: Annotated[str | None, Depends(get_idempotency_key)],
@@ -280,86 +277,57 @@ def request_retry(
                 response = CommandAcceptedResponse.model_validate(existing_record.first_response_json)
                 return JSONResponse(status_code=202, content=response.model_dump(mode="json"))
 
-    job = repository.get_job(job_id)
-    if job is None:
-        raise ApiError(
-            404,
-            error_code="JOB_NOT_FOUND",
-            message=f"Job {job_id} was not found.",
-            resource_id=str(job_id),
-            correlation_id=resolved_correlation_id,
-        )
-    if job.state != "FAILED":
-        raise ApiError(
-            409,
-            error_code="JOB_NOT_RETRYABLE",
-            message="Only FAILED jobs are retryable.",
-            resource_id=str(job_id),
-            current_state=job.state,
-            correlation_id=resolved_correlation_id,
-        )
-    if job.latest_error_code in _NON_RETRYABLE_CODES:
-        raise ApiError(
-            409,
-            error_code="JOB_NOT_RETRYABLE",
-            message="The latest failure code is not retryable.",
-            resource_id=str(job_id),
-            current_state=job.state,
-            correlation_id=resolved_correlation_id,
-        )
-    if _retry_exhausted(repository.session, job.job_id, settings.retry_max_attempts):
-        raise ApiError(
-            409,
-            error_code="RETRY_LIMIT_EXHAUSTED",
-            message="Retry attempts are exhausted for this job.",
-            resource_id=str(job_id),
-            current_state=job.state,
-            correlation_id=resolved_correlation_id,
-        )
-    if _latest_retry_stage(repository.session, job.job_id) is None:
-        raise ApiError(
-            409,
-            error_code="JOB_NOT_RETRYABLE",
-            message="The latest failed stage is not retryable.",
-            resource_id=str(job_id),
-            current_state=job.state,
-            correlation_id=resolved_correlation_id,
-        )
-
-    created = command_repository.create_command(
-        command_id=generate_uuid(),
-        command_type="job.retry",
-        target_resource_type="job",
-        target_resource_id=job_id,
-        requested_by=payload.requested_by,
-        operator_reason=payload.reason.strip(),
-        idempotency_key=idempotency_key or generate_uuid_str(),
-        correlation_id=resolved_correlation_id,
+    backoff_policy = BackoffPolicy.from_settings(settings)
+    retry_scheduler = RetryScheduler(
+        retry_repository=retry_repository,
+        job_repository=repository,
+        event_repository=event_repository,
+        classifier=RetryClassifier(),
+        backoff_policy=backoff_policy,
     )
+    service = ManualRetryService(
+        command_repository=command_repository,
+        job_repository=repository,
+        retry_repository=retry_repository,
+        event_repository=event_repository,
+        retry_scheduler=retry_scheduler,
+        classifier=RetryClassifier(),
+        backoff_policy=backoff_policy,
+    )
+    try:
+        result = service.accept_manual_retry_command(
+            job_id=job_id,
+            requested_by=payload.requested_by,
+            operator_reason=payload.reason,
+            idempotency_key=idempotency_key,
+            correlation_id=resolved_correlation_id,
+        )
+    except ManualRetryError as exc:
+        raise ApiError(
+            exc.status_code,
+            error_code=exc.error_code,
+            message=exc.message,
+            field=exc.field,
+            resource_id=exc.resource_id,
+            current_state=exc.current_state,
+            correlation_id=exc.correlation_id,
+        ) from exc
+
     response = CommandAcceptedResponse(
-        command_id=created.command_id,
+        command_id=result.command_id,
         status="accepted",
         target_resource_type="job",
-        target_resource_id=job_id,
-        accepted_at=_format_datetime(created.created_at),
-        correlation_id=resolved_correlation_id,
+        target_resource_id=result.job_id,
+        accepted_at=result.accepted_at,
+        correlation_id=result.correlation_id,
     )
-    if idempotency_key is not None:
-        command_repository.reserve_idempotency_key(
-            idempotency_key_id=generate_uuid(),
-            scope=scope,
-            idempotency_key=idempotency_key,
-            target_type="job",
-            target_id=job_id,
-            payload_hash=payload_hash,
-            first_response_json=response.model_dump(mode="json"),
-        )
+    job = repository.get_job(job_id)
     log_repository.write_summary(
         event_name="job.retry_requested",
         sanitized_message=f"Retry requested for job {job_id}.",
         job_id=job_id,
-        watcher_id=job.watcher_id,
-        correlation_id=resolved_correlation_id,
+        watcher_id=None if job is None else job.watcher_id,
+        correlation_id=result.correlation_id,
     )
     repository.session.commit()
     return JSONResponse(status_code=202, content=response.model_dump(mode="json"))
