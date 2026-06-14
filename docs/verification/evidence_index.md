@@ -11,6 +11,7 @@ Evidence artifacts shall be written under `stream_lite/docs/verification/evidenc
 | `metrics_catalog_review.md` | docs review | Markdown | metric coverage by component and requirement. |
 | `failure_policy_review.md` | docs review | Markdown | failure classes and missing behavior. |
 | `streamlit_control_review.md` | docs review/manual | Markdown | control-to-API mapping result. |
+| `streamlit_manual_check.md` | manual dashboard check | Markdown | Streamlit page/control checklist, runtime result, gaps. |
 | `verification_matrix_lint.json` | static lint | JSON | requirements without verification entries. |
 | `sphinx_build.txt` | docs build | text | command, exit code, warnings, errors. |
 | `e2e_happy_path/summary.md` | E2E test | Markdown | steps, job IDs, outputs, metrics, screenshots if available. |
@@ -24,4 +25,5 @@ Evidence artifacts shall be written under `stream_lite/docs/verification/evidenc
 
 evidence/README
 evidence/schema_fixture_validation
+evidence/streamlit_manual_check
 ```

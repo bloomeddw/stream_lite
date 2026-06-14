@@ -67,6 +67,26 @@ def test_api_client_sends_idempotency_key_for_retry_job(monkeypatch) -> None:
     assert json.loads(body.decode("utf-8")) == payload
 
 
+def test_api_client_sends_idempotency_key_for_watcher_command(monkeypatch) -> None:
+    seen = []
+
+    def fake_urlopen(req, timeout):
+        seen.append((req.get_method(), req.full_url, dict(req.header_items()), req.data))
+        return _FakeResponse({"status": "accepted"})
+
+    monkeypatch.setattr("streamlit_app.api_client.request.urlopen", fake_urlopen)
+
+    client = StreamLiteApiClient("http://api.local")
+    payload = {"requested_by": "operator", "reason": "route checked"}
+    client.watcher_command("watcher-1", "start", payload, idempotency_key="watcher-key-1")
+
+    method, url, headers, body = seen[-1]
+    assert method == "POST"
+    assert url == "http://api.local/watchers/watcher-1/start"
+    assert headers["Idempotency-key"] == "watcher-key-1"
+    assert json.loads(body.decode("utf-8")) == payload
+
+
 def test_api_client_raises_api_error_with_error_code(monkeypatch) -> None:
     def fake_urlopen(req, timeout):
         body = json.dumps({"error_code": "JOB_NOT_RETRYABLE", "message": "Job is not retryable."}).encode("utf-8")

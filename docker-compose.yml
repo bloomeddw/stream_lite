@@ -1,0 +1,148 @@
+name: stream_lite
+
+x-stream-lite-build: &stream-lite-build
+  context: .
+  dockerfile: Dockerfile
+
+x-stream-lite-env: &stream-lite-env
+  STREAM_LITE_API_PORT: ${STREAM_LITE_API_PORT:-8000}
+  STREAM_LITE_DASHBOARD_PORT: ${STREAM_LITE_DASHBOARD_PORT:-8501}
+  STREAM_LITE_BROKER_PROFILE: ${STREAM_LITE_BROKER_PROFILE:-redis_streams}
+  STREAM_LITE_PROCESSING_ENGINE: ${STREAM_LITE_PROCESSING_ENGINE:-spark}
+  STREAM_LITE_WATCH_ROOT: ${STREAM_LITE_WATCH_ROOT:-/data/sources}
+  STREAM_LITE_OUTPUT_ROOT: ${STREAM_LITE_OUTPUT_ROOT:-/data/outputs}
+  STREAM_LITE_QUARANTINE_ROOT: ${STREAM_LITE_QUARANTINE_ROOT:-/data/quarantine}
+  STREAM_LITE_DATABASE_URL: ${STREAM_LITE_DATABASE_URL:-postgresql://stream_lite:stream_lite@postgres:5432/stream_lite}
+  STREAM_LITE_REDIS_URL: ${STREAM_LITE_REDIS_URL:-redis://redis:6379/0}
+  STREAM_LITE_DEBUG: ${STREAM_LITE_DEBUG:-false}
+  STREAM_LITE_FILE_STABILITY_SECONDS: ${STREAM_LITE_FILE_STABILITY_SECONDS:-2}
+  STREAM_LITE_MAX_FILE_SIZE_MB: ${STREAM_LITE_MAX_FILE_SIZE_MB:-100}
+  STREAM_LITE_RETRY_MAX_ATTEMPTS: ${STREAM_LITE_RETRY_MAX_ATTEMPTS:-3}
+  STREAM_LITE_RETRY_INITIAL_BACKOFF_SECONDS: ${STREAM_LITE_RETRY_INITIAL_BACKOFF_SECONDS:-1}
+  STREAM_LITE_RETRY_BACKOFF_MULTIPLIER: ${STREAM_LITE_RETRY_BACKOFF_MULTIPLIER:-2}
+  STREAM_LITE_RETRY_MAX_BACKOFF_SECONDS: ${STREAM_LITE_RETRY_MAX_BACKOFF_SECONDS:-30}
+  STREAM_LITE_RETRY_JITTER_ENABLED: ${STREAM_LITE_RETRY_JITTER_ENABLED:-true}
+  STREAM_LITE_DASHBOARD_PRESENTATION_FILE: ${STREAM_LITE_DASHBOARD_PRESENTATION_FILE:-/app/config/dashboard_presentation.yaml}
+  STREAM_LITE_LOG_LEVEL: ${STREAM_LITE_LOG_LEVEL:-INFO}
+  STREAM_LITE_RECONCILIATION_INTERVAL_SECONDS: ${STREAM_LITE_RECONCILIATION_INTERVAL_SECONDS:-10}
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-stream_lite}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stream_lite}
+      POSTGRES_DB: ${POSTGRES_DB:-stream_lite}
+    ports:
+      - "${POSTGRES_PORT:-5600}:5432"
+    volumes:
+      - stream_lite_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stream_lite -d stream_lite -h localhost -p 5432"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - stream_lite_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  migrate:
+    build: *stream-lite-build
+    image: stream_lite_app:local
+    environment:
+      <<: *stream-lite-env
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./data/sources:/data/sources
+      - ./data/outputs:/data/outputs
+      - ./data/quarantine:/data/quarantine
+    restart: "no"
+
+  api:
+    build: *stream-lite-build
+    image: stream_lite_app:local
+    environment:
+      <<: *stream-lite-env
+    command:
+      - python
+      - -m
+      - uvicorn
+      - app.api.main:create_app
+      - --factory
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+    ports:
+      - "${STREAM_LITE_API_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    volumes:
+      - ./data/sources:/data/sources
+      - ./data/outputs:/data/outputs
+      - ./data/quarantine:/data/quarantine
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5).read()"
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  dashboard:
+    build: *stream-lite-build
+    image: stream_lite_app:local
+    environment:
+      <<: *stream-lite-env
+    command:
+      - python
+      - -m
+      - streamlit
+      - run
+      - docker/streamlit_launcher.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+    ports:
+      - "${STREAM_LITE_DASHBOARD_PORT:-8501}:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./data/sources:/data/sources:ro
+      - ./data/outputs:/data/outputs:ro
+      - ./data/quarantine:/data/quarantine:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=5).read()"
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  stream_lite_postgres_data:
+    name: stream_lite_postgres_data
+  stream_lite_redis_data:
+    name: stream_lite_redis_data

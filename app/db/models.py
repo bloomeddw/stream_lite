@@ -53,7 +53,7 @@ ROUTE_POLICY = sa.Enum(
     create_constraint=True,
     validate_strings=True,
 )
-JOB_STATE = sa.Enum(
+JOB_STATE_VALUES = (
     "DETECTED",
     "STABILIZING",
     "REGISTERED",
@@ -69,11 +69,26 @@ JOB_STATE = sa.Enum(
     "FAILED",
     "COMPLETED",
     "COMPLETED_WITH_DELIVERY_ERRORS",
-    name="job_state",
-    native_enum=False,
-    create_constraint=True,
-    validate_strings=True,
 )
+
+
+def _job_state_enum(name: str) -> sa.Enum:
+    return sa.Enum(
+        *JOB_STATE_VALUES,
+        name=name,
+        native_enum=False,
+        create_constraint=True,
+        validate_strings=True,
+    )
+
+
+# SQLAlchemy renders non-native Enum values as CHECK constraints. PostgreSQL
+# requires constraint names to be unique within a table, so columns that reuse
+# the same value set in one table need distinct constraint names.
+JOB_STATE = _job_state_enum("job_state")
+TERMINAL_JOB_STATE = _job_state_enum("terminal_job_state")
+PREVIOUS_JOB_STATE = _job_state_enum("previous_job_state")
+NEW_JOB_STATE = _job_state_enum("new_job_state")
 ACTOR_SERVICE = sa.Enum(
     "api",
     "watcher",
@@ -96,15 +111,21 @@ FAILURE_CLASS = sa.Enum(
     create_constraint=True,
     validate_strings=True,
 )
-RETRY_STAGE = sa.Enum(
-    "validation",
-    "processing",
-    "delivery",
-    name="retry_stage",
-    native_enum=False,
-    create_constraint=True,
-    validate_strings=True,
-)
+RETRY_STAGE_VALUES = ("validation", "processing", "delivery")
+
+
+def _retry_stage_enum(name: str) -> sa.Enum:
+    return sa.Enum(
+        *RETRY_STAGE_VALUES,
+        name=name,
+        native_enum=False,
+        create_constraint=True,
+        validate_strings=True,
+    )
+
+
+RETRY_STAGE = _retry_stage_enum("retry_stage")
+NEXT_RETRY_STAGE = _retry_stage_enum("next_retry_stage")
 STAGE_NAME = sa.Enum(
     "validation",
     "processing",
@@ -372,7 +393,7 @@ class JobModel(Base, CreatedAtMixin, UpdatedAtMixin):
     detected_at: Mapped[datetime] = mapped_column(sa.DateTime(timezone=True), nullable=False)
     stable_at: Mapped[datetime | None] = mapped_column(sa.DateTime(timezone=True))
     state: Mapped[str] = mapped_column(JOB_STATE, nullable=False)
-    terminal_state: Mapped[str | None] = mapped_column(JOB_STATE)
+    terminal_state: Mapped[str | None] = mapped_column(TERMINAL_JOB_STATE)
     attempt_number: Mapped[int] = mapped_column(sa.Integer(), nullable=False, default=0)
     correlation_id: Mapped[UUID] = mapped_column(sa.Uuid(as_uuid=True), nullable=False)
     latest_error_code: Mapped[str | None] = mapped_column(sa.String(64))
@@ -391,8 +412,8 @@ class JobStateHistoryModel(Base, CreatedAtMixin):
         sa.ForeignKey("jobs.job_id", ondelete="CASCADE"),
         nullable=False,
     )
-    previous_state: Mapped[str | None] = mapped_column(JOB_STATE)
-    new_state: Mapped[str] = mapped_column(JOB_STATE, nullable=False)
+    previous_state: Mapped[str | None] = mapped_column(PREVIOUS_JOB_STATE)
+    new_state: Mapped[str] = mapped_column(NEW_JOB_STATE, nullable=False)
     actor_service: Mapped[str] = mapped_column(ACTOR_SERVICE, nullable=False)
     reason_code: Mapped[str] = mapped_column(sa.String(128), nullable=False)
     transition_sequence: Mapped[int] = mapped_column(sa.Integer(), nullable=False)
@@ -458,7 +479,7 @@ class DeliveryAttemptModel(Base, CreatedAtMixin, UpdatedAtMixin):
             "job_id",
             "destination_folder_id",
             "attempt_number",
-            name="uq_delivery_attempts_job_id_destination_folder_id_attempt_number",
+            name="uq_delivery_attempts_job_dest_attempt",
         ),
     )
 
@@ -527,7 +548,7 @@ class RetryScheduleModel(Base, CreatedAtMixin, UpdatedAtMixin):
     max_attempts: Mapped[int] = mapped_column(sa.Integer(), nullable=False)
     jitter_enabled: Mapped[bool] = mapped_column(sa.Boolean(), nullable=False)
     status: Mapped[str] = mapped_column(sa.String(32), nullable=False)
-    next_stage: Mapped[str] = mapped_column(RETRY_STAGE, nullable=False)
+    next_stage: Mapped[str] = mapped_column(NEXT_RETRY_STAGE, nullable=False)
     last_error_code: Mapped[str | None] = mapped_column(sa.String(64))
     correlation_id: Mapped[UUID] = mapped_column(sa.Uuid(as_uuid=True), nullable=False)
 
@@ -617,7 +638,7 @@ class StageOwnershipClaimModel(Base, CreatedAtMixin, UpdatedAtMixin):
 class DuplicateSuppressionObservationModel(Base, CreatedAtMixin):
     __tablename__ = "duplicate_suppression_observations"
     __table_args__ = (
-        sa.Index("ix_duplicate_suppression_observations_existing_job_id_observed_at", "existing_job_id", "observed_at"),
+        sa.Index("ix_dup_obs_existing_job_observed_at", "existing_job_id", "observed_at"),
     )
 
     duplicate_observation_id: Mapped[UUID] = mapped_column(sa.Uuid(as_uuid=True), primary_key=True)
@@ -722,6 +743,10 @@ __all__ = [
     "HealthObservationModel",
     "IdempotencyKeyModel",
     "JOB_STATE",
+    "JOB_STATE_VALUES",
+    "TERMINAL_JOB_STATE",
+    "PREVIOUS_JOB_STATE",
+    "NEW_JOB_STATE",
     "JobModel",
     "JobStateHistoryModel",
     "OPERATIONAL_STATUS",
@@ -732,6 +757,8 @@ __all__ = [
     "ProcessingAttemptModel",
     "QuarantineRecordModel",
     "RETRY_STAGE",
+    "RETRY_STAGE_VALUES",
+    "NEXT_RETRY_STAGE",
     "ROUTE_POLICY",
     "RetryScheduleModel",
     "STAGE_NAME",

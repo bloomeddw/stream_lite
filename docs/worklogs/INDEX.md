@@ -7,6 +7,12 @@ This index publishes retained WP-00 and requirements-cleanup worklogs, plus hist
 ```{toctree}
 :maxdepth: 1
 
+WORKLOG-20260614-docker-compose-and-postgres-identifier-fix
+WORKLOG-20260605-wp11-final-verification
+WORKLOG-20260605-wp11b2-retry-controls
+WORKLOG-20260605-wp11b2-watcher-controls
+WORKLOG-20260605-wp11b1-readonly-closure
+WORKLOG-20260506-wp11b1-streamlit-readonly-shell
 WORKLOG-20260505-wp11a-streamlit-foundation-warning-token-fix
 WORKLOG-20260504-wp11a-streamlit-foundation
 WORKLOG-20260504-wp10c-manual-retry

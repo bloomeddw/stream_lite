@@ -6,6 +6,8 @@ Every variable in this catalog shall appear in `.env.example`. Secrets shall nev
 |---|---|---:|---|---|---|---:|---|---|---|---|
 | `STREAM_LITE_API_PORT` | Host API port. | yes | `8000` | `8000` | integer `1024`-`65535` | no | runtime | use default | `CONFIG_INVALID_ENUM` | SL-RUN-002 |
 | `STREAM_LITE_DASHBOARD_PORT` | Host Streamlit port. | yes | `8501` | `8501` | integer `1024`-`65535` | no | runtime | use default | `CONFIG_INVALID_ENUM` | SL-RUN-003 |
+| `POSTGRES_PORT` | Host port mapped to the PostgreSQL container's internal `5432` port. | no | `5600` | `5600` | integer `1024`-`65535`; host-side only | no | docker compose | use default | Docker reports port bind failure | SL-RUN-004, SL-RUN-014, SL-RUN-021 |
+| `REDIS_PORT` | Host port mapped to the Redis container's internal `6379` port. | no | `6379` | `6379` | integer `1024`-`65535`; host-side only | no | docker compose | use default | Docker reports port bind failure | SL-RUN-005, SL-RUN-014, SL-RUN-021 |
 | `STREAM_LITE_BROKER_PROFILE` | Event broker profile. | yes | `redis_streams` | `redis_streams` | `redis_streams` only in v0.1 | no | runtime | use default | `CONFIG_UNSUPPORTED_DEFERRED_PROFILE` | SL-RUN-012 |
 | `STREAM_LITE_PROCESSING_ENGINE` | Processing engine profile. | yes | `spark` | `spark` | `spark` only in v0.1 | no | runtime | use default | `CONFIG_UNSUPPORTED_DEFERRED_PROFILE` | SL-RUN-010 |
 | `STREAM_LITE_WATCH_ROOT` | Container root for source folders. | yes | `/data/sources` | `/data/sources` | absolute container path under mounted volume | no | watcher | service not ready | `PATH_ROOT_UNAVAILABLE` | SL-RUN-006 |

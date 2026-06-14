@@ -92,11 +92,19 @@ class StreamLiteApiClient:
     def preview_routes(self, watcher_id: str, payload: Mapping[str, Any]) -> JsonDict:
         return self._request("POST", f"/watchers/{_quote_path(watcher_id)}/preview-routes", payload=payload)
 
-    def watcher_command(self, watcher_id: str, action: str, payload: Mapping[str, Any]) -> JsonDict:
+    def watcher_command(
+        self,
+        watcher_id: str,
+        action: str,
+        payload: Mapping[str, Any],
+        *,
+        idempotency_key: str | None = None,
+    ) -> JsonDict:
         if action not in _WATCHER_ACTIONS:
             allowed = ", ".join(sorted(_WATCHER_ACTIONS))
             raise ValueError(f"Unsupported watcher action {action!r}; expected one of: {allowed}")
-        return self._request("POST", f"/watchers/{_quote_path(watcher_id)}/{action}", payload=payload)
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key else None
+        return self._request("POST", f"/watchers/{_quote_path(watcher_id)}/{action}", payload=payload, headers=headers)
 
     def browse_files(self, params: Mapping[str, Any]) -> JsonDict:
         return self._request("GET", "/files/browse", params=params)

@@ -45,8 +45,7 @@ watcher_lifecycle_state = _enum(
 )
 operational_status = _enum("operational_status", "green", "yellow", "red")
 route_policy = _enum("route_policy", "tag_match_all_destinations")
-job_state = _enum(
-    "job_state",
+JOB_STATE_VALUES = (
     "DETECTED",
     "STABILIZING",
     "REGISTERED",
@@ -63,6 +62,14 @@ job_state = _enum(
     "COMPLETED",
     "COMPLETED_WITH_DELIVERY_ERRORS",
 )
+
+# SQLAlchemy renders non-native Enum values as CHECK constraints. PostgreSQL
+# requires constraint names to be unique within a table, so columns that reuse
+# the same value set in one table need distinct constraint names.
+job_state = _enum("job_state", *JOB_STATE_VALUES)
+terminal_job_state = _enum("terminal_job_state", *JOB_STATE_VALUES)
+previous_job_state = _enum("previous_job_state", *JOB_STATE_VALUES)
+new_job_state = _enum("new_job_state", *JOB_STATE_VALUES)
 actor_service = _enum(
     "actor_service",
     "api",
@@ -75,7 +82,9 @@ actor_service = _enum(
     "streamlit",
 )
 failure_class = _enum("failure_class", "retryable", "non_retryable")
-retry_stage = _enum("retry_stage", "validation", "processing", "delivery")
+RETRY_STAGE_VALUES = ("validation", "processing", "delivery")
+retry_stage = _enum("retry_stage", *RETRY_STAGE_VALUES)
+next_retry_stage = _enum("next_retry_stage", *RETRY_STAGE_VALUES)
 stage_name = _enum("stage_name", "validation", "processing", "delivery", "retry", "outbox")
 command_status = _enum("command_status", "accepted", "running", "succeeded", "failed", "expired")
 outbox_status = _enum("outbox_status", "pending", "published", "publish_failed", "dead_lettered")
@@ -206,7 +215,7 @@ def upgrade() -> None:
         sa.Column("detected_at", sa.DateTime(timezone=True), nullable=False),
         sa.Column("stable_at", sa.DateTime(timezone=True)),
         sa.Column("state", job_state, nullable=False),
-        sa.Column("terminal_state", job_state),
+        sa.Column("terminal_state", terminal_job_state),
         sa.Column("attempt_number", sa.Integer(), nullable=False),
         sa.Column("correlation_id", sa.Uuid(as_uuid=True), nullable=False),
         sa.Column("latest_error_code", sa.String(length=64)),
@@ -219,8 +228,8 @@ def upgrade() -> None:
         "job_state_history",
         sa.Column("history_id", sa.Uuid(as_uuid=True), primary_key=True, nullable=False),
         sa.Column("job_id", sa.Uuid(as_uuid=True), sa.ForeignKey("jobs.job_id", ondelete="CASCADE"), nullable=False),
-        sa.Column("previous_state", job_state),
-        sa.Column("new_state", job_state, nullable=False),
+        sa.Column("previous_state", previous_job_state),
+        sa.Column("new_state", new_job_state, nullable=False),
         sa.Column("actor_service", actor_service, nullable=False),
         sa.Column("reason_code", sa.String(length=128), nullable=False),
         sa.Column("transition_sequence", sa.Integer(), nullable=False),
@@ -296,7 +305,7 @@ def upgrade() -> None:
             "job_id",
             "destination_folder_id",
             "attempt_number",
-            name="uq_delivery_attempts_job_id_destination_folder_id_attempt_number",
+            name="uq_delivery_attempts_job_dest_attempt",
         ),
     )
     op.create_index("ix_delivery_attempts_status_updated_at", "delivery_attempts", ["status", "updated_at"])
@@ -332,7 +341,7 @@ def upgrade() -> None:
         sa.Column("max_attempts", sa.Integer(), nullable=False),
         sa.Column("jitter_enabled", sa.Boolean(), nullable=False),
         sa.Column("status", sa.String(length=32), nullable=False),
-        sa.Column("next_stage", retry_stage, nullable=False),
+        sa.Column("next_stage", next_retry_stage, nullable=False),
         sa.Column("last_error_code", sa.String(length=64)),
         sa.Column("correlation_id", sa.Uuid(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
@@ -433,7 +442,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
     )
     op.create_index(
-        "ix_duplicate_suppression_observations_existing_job_id_observed_at",
+        "ix_dup_obs_existing_job_observed_at",
         "duplicate_suppression_observations",
         ["existing_job_id", "observed_at"],
     )
@@ -497,7 +506,7 @@ def downgrade() -> None:
     op.drop_index("ix_quarantine_records_job_id", table_name="quarantine_records")
     op.drop_table("quarantine_records")
     op.drop_index(
-        "ix_duplicate_suppression_observations_existing_job_id_observed_at",
+        "ix_dup_obs_existing_job_observed_at",
         table_name="duplicate_suppression_observations",
     )
     op.drop_table("duplicate_suppression_observations")
